@@ -1,32 +1,49 @@
-import { Component } from '@angular/core';
-
-const USER_DATA = [
-  {"name": "John Smith", "occupation": "Advisor", "dateOfBirth": "1984-05-05", "age": 36},
-  {"name": "Muhi Masri", "occupation": "Developer", "dateOfBirth": "1992-02-02", "age": 28},
-  {"name": "Peter Adams", "occupation": "HR", "dateOfBirth": "2000-01-01", "age": 20},
-  {"name": "Lora Bay", "occupation": "Marketing", "dateOfBirth": "1977-03-03", "age": 43},
+import { Component, ViewChild,ElementRef } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
+const USER_DATA =  [
+  {"Domain": "John Smith", "Price": 122, "Update": 1984, "Clicks": 36},
+  {"Domain": "Muhi Masri", "Price": 222, "Update": 1992, "Clicks": 28},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  {"Domain": "Peter Adams", "Price": 987, "Update": 2000, "Clicks": 20},
+  {"Domain": "Lora Bay", "Price": 625, "Update": 1977, "Clicks": 43},
+  
 ]
 
 const COLUMNS_SCHEMA = [
   {
-      key: "name",
+      key: "Domain",
       type: "text",
-      label: "Full Name"
+      label: "Domain"
   },
   {
-      key: "occupation",
+      key: "Price",
       type: "text",
-      label: "Occupation"
+      label: "Price"
   },
   {
-    key: "dateOfBirth",
-    type: "date",
-    label: "Date of Birth"
+    key: "Update",
+    type: "any",
+    label: "Update"
 },
   {
-      key: "age",
+      key: "Clicks",
       type: "number",
-      label: "Age"
+      label: "Clicks"
   },
   {
     key: "isEdit",
@@ -35,13 +52,30 @@ const COLUMNS_SCHEMA = [
   }
 ]
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  template: `<input matInput (keyup)="applyFilter($event)" placeholder="filter">`
 })
 export class AppComponent {
   displayedColumns: string[] = COLUMNS_SCHEMA.map(col => col.key);
-  dataSource = USER_DATA;
+  
   columnsSchema = COLUMNS_SCHEMA;
+ 
+ dataSource = new MatTableDataSource(USER_DATA);
+ @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+ 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 }
