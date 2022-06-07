@@ -2,6 +2,7 @@ import { Component, ViewChild,ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatSort } from '@angular/material/sort';
 const USER_DATA =  [
   {"Domain": "John Smith", "Price": 122, "Update": 1984, "Clicks": 36},
   {"Domain": "Muhi Masri", "Price": 222, "Update": 1992, "Clicks": 28},
@@ -60,16 +61,19 @@ const COLUMNS_SCHEMA = [
   styleUrls: ['./app.component.scss'],
   template: `<input matInput (keyup)="applyFilter($event)" placeholder="filter">`
 })
+
 export class AppComponent {
   displayedColumns: string[] = COLUMNS_SCHEMA.map(col => col.key);
   
   columnsSchema = COLUMNS_SCHEMA;
  
  dataSource = new MatTableDataSource(USER_DATA);
+ @ViewChild('empTbSort') empTbSort = new MatSort();
  @ViewChild(MatPaginator)
   paginator!: MatPaginator;
  
   applyFilter(filterValue: string) {
+  
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
